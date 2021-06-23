@@ -138,7 +138,7 @@ namespace NzbDrone.Core.Applications.Sonarr
                         sonarrIndexer.Id = 0;
                         var newRemoteIndexer = _sonarrV3Proxy.AddIndexer(sonarrIndexer, Settings);
                         _appIndexerMapService.Insert(new AppIndexerMap
-                            {AppId = Definition.Id, IndexerId = indexer.Id, RemoteIndexerId = newRemoteIndexer.Id});
+                        { AppId = Definition.Id, IndexerId = indexer.Id, RemoteIndexerId = newRemoteIndexer.Id });
                     }
                     else
                     {

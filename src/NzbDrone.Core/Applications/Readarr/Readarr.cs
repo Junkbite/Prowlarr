@@ -139,7 +139,7 @@ namespace NzbDrone.Core.Applications.Readarr
                         readarrIndexer.Id = 0;
                         var newRemoteIndexer = _readarrV1Proxy.AddIndexer(readarrIndexer, Settings);
                         _appIndexerMapService.Insert(new AppIndexerMap
-                            {AppId = Definition.Id, IndexerId = indexer.Id, RemoteIndexerId = newRemoteIndexer.Id});
+                        { AppId = Definition.Id, IndexerId = indexer.Id, RemoteIndexerId = newRemoteIndexer.Id });
                     }
                     else
                     {
