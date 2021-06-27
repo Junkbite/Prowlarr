@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Text.Json;
 using Dapper;
 using FluentMigrator;
 using NzbDrone.Core.Applications;
@@ -21,9 +22,9 @@ namespace NzbDrone.Core.Datastore.Migration
 
         private void AddApplications(IDbConnection conn, IDbTransaction tran)
         {
-            var appIdsQuery = conn.Query<List<int>>("SELECT Id FROM Applications").ToList();
-            var updateSql = "UPDATE AppSyncProfiles SET ApplicationIds = @Id";
-            conn.Execute(updateSql, appIdsQuery, transaction: tran);
+            var appIdsQuery = conn.Query<int>("SELECT Id FROM Applications").ToList();
+            var updateSql = "UPDATE AppSyncProfiles SET ApplicationIds = @Ids";
+            conn.Execute(updateSql, new { Ids = JsonSerializer.Serialize(appIdsQuery) }, transaction: tran);
         }
     }
 }
