@@ -18,6 +18,12 @@ namespace NzbDrone.Core.Datastore.Migration
             Alter.Table("AppSyncProfiles").AddColumn("ApplicationIds").AsString().WithDefaultValue("[]");
 
             Execute.WithConnection(AddApplications);
+
+            Alter.Table("Indexers").AddColumn("AppProfileIds").AsString().WithDefaultValue("[]");
+
+            Execute.WithConnection(MigrateAppProfileId);
+
+            Delete.Column("AppProfileId").FromTable("Indexers");
         }
 
         private void AddApplications(IDbConnection conn, IDbTransaction tran)
@@ -25,6 +31,13 @@ namespace NzbDrone.Core.Datastore.Migration
             var appIdsQuery = conn.Query<int>("SELECT Id FROM Applications").ToList();
             var updateSql = "UPDATE AppSyncProfiles SET ApplicationIds = @Ids";
             conn.Execute(updateSql, new { Ids = JsonSerializer.Serialize(appIdsQuery) }, transaction: tran);
+        }
+
+        private void MigrateAppProfileId(IDbConnection conn, IDbTransaction tran)
+        {
+            var appProfileId = conn.Query<int>("SELECT AppProfileId FROM Indexers").ToList();
+            var updateSql = "UPDATE Indexers SET AppProfileIds = @Ids";
+            conn.Execute(updateSql, new { Ids = JsonSerializer.Serialize(appProfileId) }, transaction: tran);
         }
     }
 }
