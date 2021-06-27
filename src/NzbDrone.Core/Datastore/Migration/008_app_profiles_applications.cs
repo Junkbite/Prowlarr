@@ -21,7 +21,7 @@ namespace NzbDrone.Core.Datastore.Migration
 
         private void AddApplications(IDbConnection conn, IDbTransaction tran)
         {
-            var appIdsQuery = conn.Query<int>("SELECT Id FROM Applications").ToList();
+            var appIdsQuery = conn.Query<List<int>>("SELECT Id FROM Applications").ToList();
             var updateSql = "UPDATE AppSyncProfiles SET ApplicationIds = @Id";
             conn.Execute(updateSql, appIdsQuery, transaction: tran);
         }
